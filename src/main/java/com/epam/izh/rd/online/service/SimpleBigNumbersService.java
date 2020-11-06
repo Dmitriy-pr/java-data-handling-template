@@ -2,18 +2,20 @@ package com.epam.izh.rd.online.service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 
 public class SimpleBigNumbersService implements BigNumbersService {
 
     /**
      * Метод делит первое число на второе с заданной точностью
      * Например 1/3 с точностью 2 = 0.33
+     *
      * @param range точность
      * @return результат
      */
     @Override
     public BigDecimal getPrecisionNumber(int a, int b, int range) {
-        return null;
+        return new BigDecimal(a).divide(BigDecimal.valueOf(b), 2, RoundingMode.HALF_UP);
     }
 
     /**
@@ -24,6 +26,22 @@ public class SimpleBigNumbersService implements BigNumbersService {
      */
     @Override
     public BigInteger getPrimaryNumber(int range) {
-        return null;
+        int status = 1;
+        int num = 3;
+
+        for (int i = 0; i < range; ) {
+            for (int j = 2; j <= Math.sqrt(num); j++) {
+                if (num % j == 0) {
+                    status = 0;
+                    break;
+                }
+            }
+            if (status != 0) {
+                i++;
+            }
+            status = 1;
+            num++;
+        }
+        return new BigInteger(String.valueOf(num - 1));
     }
 }
